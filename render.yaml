@@ -1,28 +1,25 @@
 services:
   - type: web
-      # لاالمسافتينلي قبل السطر ده
     name: video-ai-webapp
-     runtime: python
-     rootDir: webapp
-     buildCommand: "pip install 
- -r requirements.txt"
-     startCommand: "gunicorn app:app"
-     envVars:
-     - key: REDIS_URL
-     fromService:
-                                                      type: redis
-                                                                name: redis-queue
+    runtime: python
+    rootDir: webapp
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: redis-queue
 
-                                                                  - type: redis
-                                                                      name: redis-queue
+  - type: redis
+    name: redis-queue
 
-                                                                        - type: worker
-                                                                            # لاحظ المسافتين اللي قبل السطر ده
-     name: video-ai-worker
-     dockerfilePath: ./Dockerfile
-     plan: standard
-     envVars:
-    - key: REDIS_URL
-    fromService:
-                                                                                                                    type: redis
-                                                                                                                              name: redis-queue
+  - type: worker
+    name: video-ai-worker
+    dockerfilePath: ./Dockerfile
+    plan: standard
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: redis-queue
