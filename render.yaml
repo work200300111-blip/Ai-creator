@@ -1,26 +1,29 @@
 services:
-  - type: web
-      name: video-ai-webapp
-          runtime: python
-              rootDir: webapp
-                  buildCommand: "pip install -r requirements.txt"
-                      startCommand: "gunicorn app:app"
-                          envVars:
-                                - key: REDIS_URL
-                                        fromService:
-                                                  type: redis
-                                                            name: redis-queue
+  # Service 1: The Web App
+    - type: web
+        name: video-ai-webapp
+            runtime: python
+                rootDir: webapp
+                    buildCommand: "pip install -r requirements.txt"
+                        startCommand: "gunicorn app:app"
+                            envVars:
+                                  - key: REDIS_URL
+                                          fromService:
+                                                    type: redis
+                                                              name: redis-queue
 
-                                                              - type: redis
-                                                                  name: redis-queue
+                                                                # Service 2: The Redis Queue
+                                                                  - type: redis
+                                                                      name: redis-queue
 
-                                                                    - type: worker
-                                                                        name: video-ai-worker
-                                                                            dockerfilePath: ./Dockerfile
-                                                                                plan: standard
-                                                                                    envVars:
-                                                                                          - key: REDIS_URL
-                                                                                                  fromService:
-                                                                                                            type: redis
-                                                                                                                      name: redis-queue
-                                                                                                                      
+                                                                        # Service 3: The Video Worker
+                                                                          - type: worker
+                                                                              name: video-ai-worker
+                                                                                  dockerfilePath: ./Dockerfile
+                                                                                      plan: standard # Important for video processing
+                                                                                          envVars:
+                                                                                                - key: REDIS_URL
+                                                                                                        fromService:
+                                                                                                                  type: redis
+                                                                                                                            name: redis-queue
+                                                                                                                            
