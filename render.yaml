@@ -10,14 +10,15 @@ services:
         fromService:
           type: redis
           name: redis-queue
-          property: connectionString # التصحيح الأول
+          property: connectionString
 
   - type: redis
     name: redis-queue
+    ipAllowList: [] # <-- هذا هو السطر الجديد المطلوب
 
   - type: worker
     name: video-ai-worker
-    runtime: docker # التصحيح الثاني
+    runtime: docker
     dockerfilePath: ./Dockerfile
     plan: standard
     envVars:
@@ -25,4 +26,4 @@ services:
         fromService:
           type: redis
           name: redis-queue
-          property: connectionString # التصحيح الأول
+          property: connectionString
