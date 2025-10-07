@@ -20,7 +20,7 @@ services:
     name: video-ai-worker
     runtime: docker
     dockerfilePath: ./Dockerfile
-    plan: standard
+    plan: free
     envVars:
       - key: REDIS_URL
         fromService:
