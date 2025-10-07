@@ -10,12 +10,14 @@ services:
         fromService:
           type: redis
           name: redis-queue
+          property: connectionString # التصحيح الأول
 
   - type: redis
     name: redis-queue
 
   - type: worker
     name: video-ai-worker
+    runtime: docker # التصحيح الثاني
     dockerfilePath: ./Dockerfile
     plan: standard
     envVars:
@@ -23,3 +25,4 @@ services:
         fromService:
           type: redis
           name: redis-queue
+          property: connectionString # التصحيح الأول
